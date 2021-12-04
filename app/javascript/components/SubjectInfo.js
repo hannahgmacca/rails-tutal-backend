@@ -8,6 +8,7 @@ export class SubjectInfo extends React.Component {
         subjects: []
       };
    }
+   
    componentDidMount() {
     fetch("/api/v1/subjects")
     .then(resp => resp.json())
@@ -19,17 +20,14 @@ export class SubjectInfo extends React.Component {
     .catch(error => console.log(error))
   }
 
-
   render() {
-
     return (
       <div>
       {this.state.subjects.map(obj =>
         <p key={obj.id}>{obj.title}</p>
       )}
       </div>
-  )
-}
-
+   )
+  }
 }
 export default SubjectInfo;

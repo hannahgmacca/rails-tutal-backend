@@ -10,15 +10,82 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_04_031228) do
+ActiveRecord::Schema.define(version: 2021_12_04_224849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "requests", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "tutor_id", null: false
+    t.boolean "is_approved"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["student_id"], name: "index_requests_on_student_id"
+    t.index ["tutor_id"], name: "index_requests_on_tutor_id"
+  end
+
+  create_table "student_subjects", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "subject_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["student_id"], name: "index_student_subjects_on_student_id"
+    t.index ["subject_id"], name: "index_student_subjects_on_subject_id"
+  end
+
+  create_table "students", force: :cascade do |t|
+    t.date "DOB"
+    t.bigint "user_info_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_info_id"], name: "index_students_on_user_info_id"
+  end
 
   create_table "subjects", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "tutor_students", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "tutor_id", null: false
+    t.integer "review"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["student_id"], name: "index_tutor_students_on_student_id"
+    t.index ["tutor_id"], name: "index_tutor_students_on_tutor_id"
+  end
+
+  create_table "tutor_subjects", force: :cascade do |t|
+    t.bigint "tutor_id", null: false
+    t.bigint "subject_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["subject_id"], name: "index_tutor_subjects_on_subject_id"
+    t.index ["tutor_id"], name: "index_tutor_subjects_on_tutor_id"
+  end
+
+  create_table "tutors", force: :cascade do |t|
+    t.integer "years_experience"
+    t.integer "rating"
+    t.bigint "user_info_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "rate"
+    t.index ["user_info_id"], name: "index_tutors_on_user_info_id"
+  end
+
+  create_table "user_infos", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "about"
+    t.string "suburb"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_infos_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -29,8 +96,20 @@ ActiveRecord::Schema.define(version: 2021_12_04_031228) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "isAdmin"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "requests", "students"
+  add_foreign_key "requests", "tutors"
+  add_foreign_key "student_subjects", "students"
+  add_foreign_key "student_subjects", "subjects"
+  add_foreign_key "students", "user_infos"
+  add_foreign_key "tutor_students", "students"
+  add_foreign_key "tutor_students", "tutors"
+  add_foreign_key "tutor_subjects", "subjects"
+  add_foreign_key "tutor_subjects", "tutors"
+  add_foreign_key "tutors", "user_infos"
+  add_foreign_key "user_infos", "users"
 end
