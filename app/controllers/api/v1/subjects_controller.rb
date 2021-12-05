@@ -6,7 +6,9 @@ module Api
       # GET /subjects or /subjects.json
       def index
         @subjects = Subject.all
+        
         render json: @subjects
+
       end
 
       # GET /subjects/1 or /subjects/1.json

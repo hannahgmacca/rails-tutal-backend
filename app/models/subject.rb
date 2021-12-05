@@ -1,2 +1,3 @@
 class Subject < ApplicationRecord
+    
 end

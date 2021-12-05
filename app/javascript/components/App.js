@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import SubjectInfo from './SubjectInfo'
 
+
 class App extends Component {
   render(){
     return(
@@ -8,7 +9,6 @@ class App extends Component {
       <h1> React says Hello! </h1>
       <SubjectInfo/>
       </div>
-
     )
   }
 }
