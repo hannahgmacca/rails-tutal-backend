@@ -1,4 +1,4 @@
-# Devlepor Log
+# Developer Log
 
 ## 4th December
 
