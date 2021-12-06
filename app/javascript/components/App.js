@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import SubjectInfo from './SubjectInfo'
+import SignUp from './SignUp'
 
 
 class App extends Component {
@@ -8,6 +9,7 @@ class App extends Component {
       <div>
       <h1> React says Hello! </h1>
       <SubjectInfo/>
+      <SignUp/>
       </div>
     )
   }
