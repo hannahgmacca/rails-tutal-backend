@@ -2,7 +2,9 @@ class Api::V1::TutorStudentsController < ApplicationController
     before_action :set_tutor_student, only: %i[ show edit update destroy ]
       
     def index
-   
+        @tutor_students = TutorStudent.all
+        
+        render json: @tutor_students
     end
 
     def show

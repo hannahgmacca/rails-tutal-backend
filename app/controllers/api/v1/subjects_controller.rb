@@ -13,6 +13,7 @@ module Api
 
       # GET /subjects/1 or /subjects/1.json
       def show
+        render json: @subjects
       end
 
       # GET /subjects/new

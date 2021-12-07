@@ -2,7 +2,9 @@ class Api::V1::UserInfosController < ApplicationController
     before_action :set_user_info, only: %i[ show edit update destroy ]
       
     def index
+        @user_infos = UserInfo.all
         
+        render json: @user_infos
     end
 
     def show

@@ -2,10 +2,11 @@ class Api::V1::RequestsController < ApplicationController
     before_action :set_request, only: %i[ show edit update destroy ]
       
     def index
-   
+        render json: @requests
     end
 
     def show
+        render json: @subjects
     end
 
     def new
