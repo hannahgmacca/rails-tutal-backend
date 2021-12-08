@@ -2,6 +2,8 @@ class Api::V1::RequestsController < ApplicationController
     before_action :set_request, only: %i[ show edit update destroy ]
       
     def index
+        @requests = Request.all
+        
         render json: @requests
     end
 
@@ -57,6 +59,6 @@ class Api::V1::RequestsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def request_params
-        params.require(:request).permit(:title)
+        params.require(:request).permit(:student_id, :tutor_id, :is_approved)
     end
 end

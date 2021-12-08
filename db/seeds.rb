@@ -51,3 +51,7 @@ Request.create(student_id: 4, tutor_id: 2, is_approved: false)
 Request.create(student_id: 5, tutor_id: 1, is_approved: true)
 Request.create(student_id: 5, tutor_id: 2, is_approved: false)
 
+TutorStudent.create(student_id: 1, tutor_id: 1, review: 5)
+TutorStudent.create(student_id: 2, tutor_id: 1, review: 4)
+
+

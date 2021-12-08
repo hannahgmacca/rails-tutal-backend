@@ -58,6 +58,6 @@ class Api::V1::TutorsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tutor_params
-        params.require(:tutor).permit(:title)
+        params.require(:tutor).permit(:years_experience, :rating, :user_info_id)
     end
 end

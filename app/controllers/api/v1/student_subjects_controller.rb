@@ -58,6 +58,6 @@ class Api::V1::StudentSubjectsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def student_subject_params
-        params.require(:student_subject).permit(:title)
+        params.require(:student_subject).permit(:student_id, :tutor_id, :review)
     end
 end
