@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :tests
   post 'user_token' => 'user_token#create'
   resources :users
   root 'home#index'
@@ -13,6 +14,8 @@ Rails.application.routes.draw do
   scope '/auth' do
     post '/signin', to: 'user_token#create'
     post '/signup', to: 'users#create'
+    post '/signup/tutor', to: 'users#create_tutor'
+    post '/signup/student', to: 'users#create_student'
   end
 
   # API routes are as '/api/v1/<resource>'

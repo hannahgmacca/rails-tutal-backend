@@ -8,6 +8,7 @@ class Api::V1::TutorStudentsController < ApplicationController
     end
 
     def show
+        render json: tutor_student_params[:student_id]
     end
 
     def new
