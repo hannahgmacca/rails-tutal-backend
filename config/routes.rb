@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :tests
-  post 'user_token' => 'user_token#create'
-  resources :users
+  # post 'user_token' => 'user_token#create'
+  # resources :users
   root 'home#index'
 
   # Devise Rails API requires scope, rather than namespace
@@ -11,12 +11,12 @@ Rails.application.routes.draw do
   #   end
   # end
 
-  scope '/auth' do
-    post '/signin', to: 'user_token#create'
-    post '/signup', to: 'users#create'
-    post '/signup/tutor', to: 'users#create_tutor'
-    post '/signup/student', to: 'users#create_student'
-  end
+  # scope '/auth' do
+  #   post '/signin', to: 'user_token#create'
+  #   post '/signup', to: 'users#create'
+  #   post '/signup/tutor', to: 'users#create_tutor'
+  #   post '/signup/student', to: 'users#create_student'
+  # end
 
   # API routes are as '/api/v1/<resource>'
   namespace :api do
@@ -29,6 +29,14 @@ Rails.application.routes.draw do
      resources :student_subjects
      resources :students
      resources :tutor_students
+     resources :users
+     post 'user_token' => 'user_token#create'
+     scope '/auth' do
+      post '/signin', to: 'user_token#create'
+      post '/signup', to: 'users#create'
+      post '/signup/tutor', to: 'users#create_tutor'
+      post '/signup/student', to: 'users#create_student'
+    end
     end
    end
 end
