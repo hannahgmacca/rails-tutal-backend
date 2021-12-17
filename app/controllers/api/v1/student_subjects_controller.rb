@@ -1,5 +1,6 @@
 class Api::V1::StudentSubjectsController < ApplicationController
     before_action :set_student_subject, only: %i[ show edit update destroy ]
+    before_action :authenticate_user
       
     def index
         @student_subjects = Student.all

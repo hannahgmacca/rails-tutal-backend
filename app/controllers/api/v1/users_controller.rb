@@ -1,6 +1,6 @@
-module Api
-    module V1
-        class UsersController < ApplicationController
+# module Api
+#     module V1
+        class Api::V1::UsersController < ApplicationController
             def create
                 @user = User.create(user_params)
                 if @user.save
@@ -92,5 +92,5 @@ module Api
                 params.permit(:credentials => [:username, :email, :password, :password_confirmation], :user_info => [:first_name, :last_name, :about, :suburb], :student => [:DOB])
             end
         end
-    end 
-end
+#     end 
+# end

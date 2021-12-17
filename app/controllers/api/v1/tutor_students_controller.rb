@@ -1,5 +1,6 @@
 class Api::V1::TutorStudentsController < ApplicationController
     before_action :set_tutor_student, only: %i[ show edit update destroy ]
+    before_action :authenticate_user
       
     def index
         @tutor_students = TutorStudent.all
@@ -8,7 +9,7 @@ class Api::V1::TutorStudentsController < ApplicationController
     end
 
     def show
-        render json: tutor_student_params[:student_id]
+        render json: tutor_student_params[:tutor_student_id]
     end
 
     def new

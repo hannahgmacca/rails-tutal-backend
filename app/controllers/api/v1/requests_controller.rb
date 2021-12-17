@@ -1,5 +1,6 @@
 class Api::V1::RequestsController < ApplicationController
     before_action :set_request, only: %i[ show edit update destroy ]
+    before_action :authenticate_user
       
     def index
         @requests = Request.all
@@ -8,7 +9,7 @@ class Api::V1::RequestsController < ApplicationController
     end
 
     def show
-        render json: @subjects
+        render json: @subject
     end
 
     def new

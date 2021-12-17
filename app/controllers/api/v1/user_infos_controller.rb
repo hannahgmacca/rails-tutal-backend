@@ -1,5 +1,6 @@
 class Api::V1::UserInfosController < ApplicationController
     before_action :set_user_info, only: %i[ show edit update destroy ]
+    before_action :authenticate_user
       
     def index
         @user_infos = UserInfo.all

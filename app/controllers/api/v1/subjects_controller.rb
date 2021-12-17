@@ -2,6 +2,7 @@ module Api
   module V1
     class SubjectsController < ApplicationController
       before_action :set_subject, only: %i[ show edit update destroy ]
+      before_action :authenticate_user
       
       # GET /subjects or /subjects.json
       def index
@@ -13,7 +14,7 @@ module Api
 
       # GET /subjects/1 or /subjects/1.json
       def show
-        render json: @subjects
+        render json: @subject
       end
 
       # GET /subjects/new
