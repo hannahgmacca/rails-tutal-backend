@@ -26,10 +26,10 @@
                             render json: @student.errors, status: :unprocessable_entity
                             @user.destroy
                             @user_info.destroy
-                            @student.destroy
                         end 
                     else
                         render json: @user_info.errors, status: :unprocessable_entity
+                        @user.destroy
                     end
                 else
                     render json: @user.errors, status: :unprocessable_entity
@@ -51,10 +51,10 @@
                             render json: @tutor.errors, status: :unprocessable_entity
                             @user.destroy
                             @user_info.destroy
-                            @tutor.destroy
                         end 
                     else
                         render json: @user_info.errors, status: :unprocessable_entity
+                        @user.destroy
                     end
                     else
                     render json: @user.errors, status: :unprocessable_entity
