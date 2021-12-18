@@ -39,32 +39,31 @@
             end
 
             def create_tutor
-                    @user = User.create(tutor_params[:credentials])
-                    if @user.save
-                    @user_info = UserInfo.create(tutor_params[:user_info])
-                    @user_info.user_id = @user.id
-                    if @user_info.save
-                        @tutor = Tutor.create(tutor_params[:tutor])
-                        @tutor.user_info_id = @user_info.id
+                @user = User.create(tutor_params[:credentials])
+                if @user.save
+                @user_info = UserInfo.create(tutor_params[:user_info])
+                @user_info.user_id = @user.id
+                if @user_info.save
+                    p @user_info
+                    @tutor = Tutor.create(tutor_params[:tutor])
+                    @tutor.user_info_id = @user_info.id
+                        if @tutor.save
+                            p @tutor
+                            auth_token = Knock::AuthToken.new payload: {sub: @user.id}
+                            render json: {jwt: auth_token.token, created: "created"}, status: :created
+                        else
 
-                        respond_to do |format|
-                            if @tutor.save
-                                auth_token = Knock::AuthToken.new payload: {sub: @user.id}
-                                render json: {jwt: auth_token.token}, status: :created
-                            else
-                                render json: @tutor.errors, status: :unprocessable_entity
-                                @user.destroy
-                                @user_info.destroy
-                            end 
-                        end
-
-                    else
-                        render json: @user_info.errors, status: :unprocessable_entity
-                        @user.destroy
-                    end
-                    else
-                    render json: @user.errors, status: :unprocessable_entity
-                    end
+                            render json: @tutor.errors, status: :unprocessable_entity
+                            @user.destroy
+                            @user_info.destroy
+                        end 
+                else
+                    render json: @user_info.errors, status: :unprocessable_entity
+                    @user.destroy
+                end
+                else
+                render json: @user.errors, status: :unprocessable_entity
+                end
             end
 
 
