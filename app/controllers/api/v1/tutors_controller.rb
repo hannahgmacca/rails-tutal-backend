@@ -1,6 +1,6 @@
 class Api::V1::TutorsController < ApplicationController
     before_action :set_tutor, only: %i[ show edit update destroy ]
-    before_action :authenticate_user
+    # before_action :authenticate_user
       
     def index
         @tutors = Tutor.all

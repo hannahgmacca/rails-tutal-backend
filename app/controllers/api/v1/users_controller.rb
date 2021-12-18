@@ -21,7 +21,7 @@
                         @student.user_info_id = @user_info.id
                         if @student.save
                             auth_token = Knock::AuthToken.new payload: {sub: @user.id}
-                            render json: {jwt: auth_token.token}, status: :created
+                            render json: {jwt: auth_token.token, student: @student }, status: :created
                         else
                             render json: @student.errors, status: :unprocessable_entity
                             @user.destroy
@@ -47,7 +47,7 @@
                         @tutor.user_info_id = @user_info.id
                         if @tutor.save
                             auth_token = Knock::AuthToken.new payload: {sub: @user.id}
-                            render json: {created: "created"}, status: :created
+                            render json: {jwt: auth_token.token, created: "created"}, status: :created
                         else
                             render json: @tutor.errors, status: :unprocessable_entity
                             @user.destroy
