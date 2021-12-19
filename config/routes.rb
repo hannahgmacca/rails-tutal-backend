@@ -17,8 +17,8 @@ Rails.application.routes.draw do
      resources :users
 
      # AUTH ROUTES
-     post 'user_token' => 'user_token#create'
      scope '/auth' do
+      post 'user_token' => 'user_token#create'
       post '/signin', to: 'user_token#create'
       post '/signup', to: 'users#create'
       post '/signup/tutor', to: 'users#create_tutor'
