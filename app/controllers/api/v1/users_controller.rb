@@ -44,15 +44,12 @@
                 @user_info = UserInfo.create(tutor_params[:user_info])
                 @user_info.user_id = @user.id
                 if @user_info.save
-                    p @user_info
                     @tutor = Tutor.create(tutor_params[:tutor])
                     @tutor.user_info_id = @user_info.id
                         if @tutor.save
-                            p @tutor
-                            # auth_token = Knock::AuthToken.new payload: {sub: @user.id}
-                            # # render json: {jwt: auth_token.token, created: "created"}, status: :created
+                            auth_token = Knock::AuthToken.new payload: {sub: @user.id}
+                            render json: {jwt: auth_token.token, tutor: @tutor}, status: :created
                         else
-
                             render json: @tutor.errors, status: :unprocessable_entity
                             @user.destroy
                             @user_info.destroy
