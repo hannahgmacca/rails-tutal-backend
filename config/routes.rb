@@ -15,6 +15,8 @@ Rails.application.routes.draw do
      resources :students
      resources :tutor_students
      resources :users
+
+     get '/me', to: 'users#get_current'
      post 'user_token' => 'user_token#create'
      # AUTH ROUTES
      scope '/auth' do

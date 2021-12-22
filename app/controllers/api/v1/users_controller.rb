@@ -1,6 +1,7 @@
 # module Api
 #     module V1
         class Api::V1::UsersController < ApplicationController
+            before_action :authenticate_user, only: %i[ current_user ]
             def create
                 @user = User.create(user_params)
                 if @user.save
@@ -74,6 +75,10 @@
 
                 end 
             end 
+
+            def get_current
+                render json: {user: :current_user}
+            end
 
             def index
                 @users = User.all
