@@ -1,24 +1,43 @@
 Rails.application.routes.draw do
-  resources :tests
   root 'home#index'
 
   # API routes are as '/api/v1/<resource>'
   namespace :api do
     namespace :v1 do
-     #TODO only add routes that are in use
-     resources :user_infos
-     resources :subjects
-     resources :requests
-     resources :tutor_subjects
-     resources :tutors
-     resources :student_subjects
-     resources :students
-     resources :tutor_students
-     resources :users
+     
+     ## REQUESTS ##
+     post '/requests', to: 'requests#create'
+     post '/request/:id/approve', to: 'requests#approve'
+     post '/request/:id/decline', to: 'requests#decline'
+     delete '/request/:id', to: 'requests#destroy'
+     get '/tutor/requests', to: 'requests#my_requests_tutor'
+     get '/student/requests', to: 'requests#my_requests_student'
 
+     ## SUBJECTS ##
+     get '/student/subjects', to: 'student_subjects#index'
+     get '/tutor/subjects', to: 'tutor_subjects#index'
+     post 'student/subjects', to: 'student_subjects#create'
+     post 'tutor/subjects', to: 'tutor_subjects#create'
+     delete '/tutor/subject/:id', to: 'tutor_subjects#destroy'
+     delete '/student/subject/:id', to: 'student_subjects#destroy'
+
+     ## TUTORS ## 
+     get '/student/tutors', to: 'tutor_students#my_tutors'
+     delete '/student/tutor/:id', to: 'tutor_students#remove_tutor'
+
+     ## STUDENTS ## 
+     get '/tutor/students', to: 'tutor_students#my_students'
+     delete '/tutor/student/:id', to: 'tutor_students#student'
+
+     ## CURRENT USER ## 
      get '/me', to: 'users#get_current'
+
+     ## RATING ##
+     post '/review', to: 'tutor_students#add_review'
+
      post 'user_token' => 'user_token#create'
-     # AUTH ROUTES
+
+     ### AUTHORIZATION ###
      scope '/auth' do
       post '/signin', to: 'user_token#create'
       post '/signup', to: 'users#create'

@@ -1,14 +1,16 @@
-class ApplicationController < ActionController::API
+class ApplicationController < ActionController::Base
     include Knock::Authenticable
+    before_action :authenticate_user, only: %i[ set_student set_tutor]
+    skip_before_action :verify_authenticity_token, raise: false
 
-    private
-    # def unauthorized_entity
-    #     # format.json { render json: @request.errors, status: :unprocessable_entity }
-    #     render json: {:error => "You are not authorized to perform this action"}, :status => :unauthorized
-    # end
-
-    # private
-    # def authenticate_user
-    #     authenticate_for V1::User
-    # end
+    private 
+    def set_tutor
+        @user_info = UserInfo.find_by_user_id(current_user.id)
+        @tutor = Tutor.find_by_user_info_id(@user_info.id)
+    end
+  
+    def set_student
+        @user_info = UserInfo.find_by_user_id(current_user.id)
+        @student = Student.find_by_user_info_id(@user_info.id)
+    end
 end

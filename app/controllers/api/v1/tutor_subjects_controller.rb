@@ -1,20 +1,13 @@
 class Api::V1::TutorSubjectsController < ApplicationController
-    before_action :set_tutor_subject, only: %i[ show edit update destroy ]
+    before_action :set_tutor, only: %i[ index ]
     before_action :authenticate_user
-      
+          
+    # ROUTE /tutor/subjects
+    # Returns array of subjects that belong to this tutor
     def index
-        @tutor_subjects = TutorSubject.all
+        @tutor_subjects = TutorSubject.where(tutor_id: @tutor.id)
         
         render json: @tutor_subjects
-    end
-
-    def show
-    end
-
-    def new
-    end
-
-    def edit
     end
 
     def create
@@ -26,18 +19,6 @@ class Api::V1::TutorSubjectsController < ApplicationController
         format.json { render :show, status: :created, location: @tutor_subject}
         else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @tutor_subject.errors, status: :unprocessable_entity }
-        end
-    end
-    end
-
-    def update
-    respond_to do |format|
-        if @tutor_subject.update(tutor_subject_params)
-        format.html { redirect_to @tutor_subject, notice: "tutor_subject was successfully updated." }
-        format.json { render :show, status: :ok, location: @tutor_subject }
-        else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @tutor_subject.errors, status: :unprocessable_entity }
         end
     end

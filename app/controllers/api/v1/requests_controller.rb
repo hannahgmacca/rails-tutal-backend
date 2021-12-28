@@ -1,55 +1,46 @@
 class Api::V1::RequestsController < ApplicationController
-    before_action :set_request, only: %i[ show edit update destroy ]
+    # before_action :set_request, only: %i[ show edit update destroy ]
+    before_action :set_student, only: %i[ my_requests_student ]
+    before_action :set_tutor, only: %i[ my_requests_tutor approve decline ]
     before_action :authenticate_user
       
-    def index
-        @requests = Request.all
+    # ROUTE /student/requests
+    # Returns array of requests that have been sent by current student
+    def my_requests_student
+        @requests = Request.where(student_id: @student.id)
         
         render json: @requests
     end
 
-    def show
-        render json: @subject
+    # ROUTE /tutor/requests
+    # Returns array of requests that are awaiting action for current tutor
+    def my_requests_tutor
+        @requests = Request.where(tutor_id: @tutor.id, is_approved: null)
+        
+        render json: @requests
     end
 
-    def new
+    # ROUTE /request/:id/approve
+    def approve
     end
 
-    def edit
+    # ROUTE /request/:id/decline
+    def decline
     end
 
     def create
+    # TODO: Add logic to catch if a request has already been made
     @request = Request.new(request_params)
-
-    respond_to do |format|
         if @request.save
-        format.html { redirect_to @request, notice: "Request was successfully created." }
-        format.json { render :show, status: :created, location: @request }
+            render json: { request: @request }, status: 200
         else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @request.errors, status: :unprocessable_entity }
+            render json: { error: @request.errors }, status: 404
         end
-    end
-    end
-
-    def update
-    respond_to do |format|
-        if @request.update(request_params)
-        format.html { redirect_to @request, notice: "Request was successfully updated." }
-        format.json { render :show, status: :ok, location: @request }
-        else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @request.errors, status: :unprocessable_entity }
-        end
-    end
     end
 
     def destroy
-    @request.destroy
-    respond_to do |format|
-        format.html { redirect_to request_url, notice: "Request was successfully destroyed." }
-        format.json { head :no_content }
-    end
+    # TODO: Add logic to catch if request was sent by this student
+        @request.destroy
     end
 
     private

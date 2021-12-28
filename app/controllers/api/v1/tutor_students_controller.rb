@@ -1,56 +1,32 @@
 class Api::V1::TutorStudentsController < ApplicationController
-    before_action :set_tutor_student, only: %i[ show edit update destroy ]
+    # before_action :set_tutor_student, only: %i[ show edit update destroy ]
+    before_action :set_student, only: %i[ my_tutors remove_tutor]
+    before_action :set_tutor, only: %i[ my_students remove_student]
     before_action :authenticate_user
-      
-    def index
-        @tutor_students = TutorStudent.all
-        
-        render json: @tutor_students
+    
+    #  ROUTE GET: /student/tutors
+    #  Returns array of tutors that are tutoring this student
+    def my_tutors
+        @tutors = TutorStudent.where(student_id: @student.id)
     end
 
-    def show
-        render json: tutor_student_params[:tutor_student_id]
+    #  ROUTE GET: /tutor/students
+    #  Returns array of students that current tutor is tutoring
+    def my_students
+        @tutors = TutorStudent.where(tutor_id: @tutor.id)
     end
 
-    def new
+    # ROUTE DELETE: /student/tutor/:id
+    # Deletes the tutor relationship associated with current student
+    def remove_tutor
+        #TODO
     end
 
-    def edit
-    end
-
-    def create
-    @tutor_student = TutorStudent.new(tutor_student_params)
-
-    respond_to do |format|
-        if @tutor_student.save
-        format.html { redirect_to @tutor_student, notice: "tutor_student was successfully created." }
-        format.json { render :show, status: :created, location: @tutor_student}
-        else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @tutor_student.errors, status: :unprocessable_entity }
-        end
-    end
-    end
-
-    def update
-    respond_to do |format|
-        if @tutor_student.update(tutor_student_params)
-        format.html { redirect_to @tutor_student, notice: "tutor_student was successfully updated." }
-        format.json { render :show, status: :ok, location: @tutor_student }
-        else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @tutor_student.errors, status: :unprocessable_entity }
-        end
-    end
-    end
-
-    def destroy
-    @tutor_student.destroy
-    respond_to do |format|
-        format.html { redirect_to tutor_student_url, notice: "tutor student was successfully destroyed." }
-        format.json { head :no_content }
-    end
-    end
+    # ROUTE DELETE: /tutor/student/:id
+    # Deletes the student relationship associated with current tutor
+    def remove_student
+        #TODO
+    end   
 
     private
     # Use callbacks to share common setup or constraints between actions.
@@ -60,6 +36,6 @@ class Api::V1::TutorStudentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tutor_student_params
-        params.require(:tutor_student).permit(:student_id, :tutor_id)
+        params.require(:tutor_student).permit(:student_id, :tutor_id, :review)
     end
 end

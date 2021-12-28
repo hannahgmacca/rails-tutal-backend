@@ -1,54 +1,29 @@
 class Api::V1::StudentSubjectsController < ApplicationController
-    before_action :set_student_subject, only: %i[ show edit update destroy ]
+    before_action :set_student_subject, only: %i[ destroy ]
+    before_action :set_student_subject, only: %i[ index ]
     before_action :authenticate_user
       
+    # ROUTE /student/subjects
+    # Returns array of subjects that belong to this student
     def index
-        @student_subjects = Student.all
+        @student_subjects = StudentSubject.where(student_id: @student.id)
         
         render json: @student_subjects
     end
 
-    def show
-    end
-
-    def new
-    end
-
-    def edit
-    end
-
     def create
+    # TODO: Add check to make sure student doesn't already have this subject
     @student_subject = StudentSubject.new(student_subject_params)
-
-    respond_to do |format|
-        if @student_subject.save
-        format.html { redirect_to @student_subject, notice: "student_subject was successfully created." }
-        format.json { render :show, status: :created, location: @student_subject }
-        else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @student_subject.errors, status: :unprocessable_entity }
-        end
-    end
-    end
-
-    def update
-    respond_to do |format|
-        if @student_subject.update(student_subject_params)
-        format.html { redirect_to @student_subject, notice: "student_subject was successfully updated." }
-        format.json { render :show, status: :ok, location: @student_subject }
-        else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @student_subject.errors, status: :unprocessable_entity }
-        end
+    if @student_subject.save
+        render json:  { status: :created }
+    else
+        render json:  { error: @student_subject.erros }
     end
     end
 
     def destroy
+    # TODO: Add logic to catch if subject belongs to this student
     @student_subject.destroy
-    respond_to do |format|
-        format.html { redirect_to student_subject_url, notice: "student_subject was successfully destroyed." }
-        format.json { head :no_content }
-    end
     end
 
     private
@@ -59,6 +34,6 @@ class Api::V1::StudentSubjectsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def student_subject_params
-        params.require(:student_subject).permit(:student_id, :tutor_id, :review)
+        params.require(:student_subject).permit(:student_id, :subject_id)
     end
 end
