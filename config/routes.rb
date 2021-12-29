@@ -4,7 +4,10 @@ Rails.application.routes.draw do
   # API routes are as '/api/v1/<resource>'
   namespace :api do
     namespace :v1 do
-     
+
+     ## TUTOR SEARCH ##
+     get '/tutors', to: 'tutors#index'
+
      ## REQUESTS ##
      post '/requests', to: 'requests#create'
      post '/request/:id/approve', to: 'requests#approve'
@@ -24,6 +27,7 @@ Rails.application.routes.draw do
      ## TUTORS ## 
      get '/student/tutors', to: 'tutor_students#my_tutors'
      delete '/student/tutor/:id', to: 'tutor_students#remove_tutor'
+     post 'student/tutor', to: 'tutor_students#create'
 
      ## STUDENTS ## 
      get '/tutor/students', to: 'tutor_students#my_students'

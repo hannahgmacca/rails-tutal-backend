@@ -3,6 +3,17 @@ class Api::V1::TutorsController < ApplicationController
     before_action :set_student, only: %i[ my_tutors ]
     before_action :authenticate_user, only: %i[ my_tutors ]
 
+    def index
+        @tutors = Tutor.where(nil)
+        @tutors = @tutors.filter_by_postcode(params[:postcode]) if params[:postcode].present?
+        @tutors = @tutors.filter_by_experience(params[:years_experience]) if params[:years_experience].present?
+        @tutors = @tutors.filter_by_subjects(params[:subjects]) if params[:subjects].present?
+        @tutors = @tutors.filter_by_rate(params[:rate]) if params[:rate].present?
+        @tutors = @tutors.filter_by_(params[:online]) if params[:online].present?
+
+        render json: @tutors
+    end 
+    
     # def show
     # end
 
@@ -54,6 +65,6 @@ class Api::V1::TutorsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tutor_params
-        params.require(:tutor).permit(:years_experience, :rating, :user_info_id)
+        params.require(:tutor).permit(:years_experience, :rating, :user_info_id, :is_online)
     end
 end
