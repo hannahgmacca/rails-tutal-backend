@@ -9,7 +9,7 @@ class Api::V1::TutorsController < ApplicationController
         @tutors = @tutors.filter_by_experience(params[:years_experience]) if params[:years_experience].present?
         @tutors = @tutors.filter_by_subject(params[:subject]) if params[:subject].present?
         @tutors = @tutors.filter_by_rate(params[:rate]) if params[:rate].present?
-        @tutors = @tutors.filter_by_online if (params[:online] = true)
+        @tutors = @tutors.filter_by_online if params[:online] == 'true'
 
         render json: @tutors
     end 
@@ -65,6 +65,6 @@ class Api::V1::TutorsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tutor_params
-        params.require(:tutor).permit(:years_experience, :rating, :user_info_id, :online, :rate)
+        params.require(:tutor).permit(:user, :years_experience, :rating, :user_info_id, :online, :rate)
     end
 end

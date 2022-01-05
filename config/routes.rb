@@ -34,6 +34,7 @@ Rails.application.routes.draw do
      ## STUDENTS ## 
      get '/tutor/students', to: 'tutor_students#my_students'
      delete '/tutor/student/:id', to: 'tutor_students#student'
+     get '/students', to: 'students#index'
 
      ## CURRENT USER ## 
      get '/me', to: 'users#get_current'
