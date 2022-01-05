@@ -1,5 +1,4 @@
 class Api::V1::TutorStudentsController < ApplicationController
-    # before_action :set_tutor_student, only: %i[ show edit update destroy ]
     before_action :set_student, only: %i[ my_tutors remove_tutor]
     before_action :set_tutor, only: %i[ my_students remove_student]
     # before_action :authenticate_user

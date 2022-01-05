@@ -19,10 +19,12 @@ Rails.application.routes.draw do
      ## SUBJECTS ##
      get '/student/subjects', to: 'student_subjects#index'
      get '/tutor/subjects', to: 'tutor_subjects#index'
+     get '/subjects', to: 'subjects#index'
      post 'student/subjects', to: 'student_subjects#create'
      post 'tutor/subjects', to: 'tutor_subjects#create'
      delete '/tutor/subject/:id', to: 'tutor_subjects#destroy'
      delete '/student/subject/:id', to: 'student_subjects#destroy'
+
 
      ## TUTORS ## 
      get '/student/tutors', to: 'tutor_students#my_tutors'

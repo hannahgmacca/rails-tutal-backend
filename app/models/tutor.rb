@@ -4,9 +4,14 @@ class Tutor < ApplicationRecord
   has_many :requests
   has_many :tutor_subjects
 
-  scope :filter_by_postcode, -> (postcode) { joins(:user_info).where('user_info.postcode > ? AND user_info.postcode < ?', postcode - 10, postcode + 10) }
+  # Returns tutors within 10 postcodes of user input
+  scope :filter_by_postcode, -> (postcode) { joins(:user_info).merge(UserInfo.filter_by_postcode(postcode))}
+  # Returns tutors with a minumum level of experience
   scope :filter_by_experience, -> (years_experience) { where( 'years_experience >= ?', years_experience)}
-  scope :filter_by_subjects,  ->  (subjects) { joins(:tutor_subjects).where( 'tutor_subjects.subject_id = ?', subject_id )}
+  # Returns tutors that have a subject
+  scope :filter_by_subject,  ->  (subject) { joins(:tutor_subjects).merge(TutorSubject.filter_by_subject(subject) )}
+  # Returns tutors with a max rate
   scope :filter_by_rate, -> (rate) { where('rate <= ?', rate)}
-  scope :filter_by_online, -> (is_online) { where(online: true)}
+  # Returns tutors that are online
+  scope :filter_by_online, -> { where(online: true)}
 end
