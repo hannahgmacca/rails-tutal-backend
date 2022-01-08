@@ -1,8 +1,16 @@
 class Api::V1::RequestsController < ApplicationController
-    # before_action :set_request, only: %i[ show edit update destroy ]
-    before_action :set_student, only: %i[ my_requests_student ]
+    before_action :set_request, only: %i[ show edit update destroy approve decline ]
+    before_action :set_student, only: %i[ my_requests_student destroy create]
     before_action :set_tutor, only: %i[ my_requests_tutor approve decline ]
-    before_action :authenticate_user
+    # before_action :authenticate_user
+
+    # ROUTE GET /requests
+    # Returns all requests for debugging
+    def index
+        @requests = Request.all
+
+        render json: @requests
+    end
       
     # ROUTE /student/requests
     # Returns array of requests that have been sent by current student
@@ -22,25 +30,44 @@ class Api::V1::RequestsController < ApplicationController
 
     # ROUTE /request/:id/approve
     def approve
+        if @tutor.id == @request.id
+            @request.approved = true 
+        else
+            render json: {error: "You are not authorised to approved this"}, status: 400
+        end
     end
 
     # ROUTE /request/:id/decline
     def decline
-    end
-
-    def create
-    # TODO: Add logic to catch if a request has already been made
-    @request = Request.new(request_params)
-        if @request.save
-            render json: { request: @request }, status: 200
+        if @tutor.id == @request.id
+            @request.approved = false
         else
-            render json: { error: @request.errors }, status: 404
+            render json: {error: "You are not authorised to approved this"}, status: 400
         end
     end
 
+    def create
+    already_exists = Request.find_by_tutor_id_and_student_id(request_params[:tutor_id], @student.id)
+    if already_exists
+        render json: { error: "Request has already been made" }, status: 400
+    else
+    @request = Request.new(request_params)
+    @request.student_id = @student.id
+        if @request.save
+            render json: { request: @request }, status: 200
+        else
+            render json: { error: @request.errors, student: @student.id }, status: 404
+        end
+    end
+    end
+
+    # ROUTE delete /request/:id
     def destroy
-    # TODO: Add logic to catch if request was sent by this student
-        @request.destroy
+        if @student.id == @request.student_id
+            @request.destroy
+        else
+            render json: { error: "You do not have permission to do this" }, status: 404
+        end
     end
 
     private
@@ -51,6 +78,6 @@ class Api::V1::RequestsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def request_params
-        params.require(:request).permit(:student_id, :tutor_id, :is_approved)
+        params.permit(:request, :tutor_id, :tutor_id, :is_approved)
     end
 end

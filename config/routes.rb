@@ -9,6 +9,7 @@ Rails.application.routes.draw do
      get '/tutors', to: 'tutors#index'
 
      ## REQUESTS ##
+     get '/requests', to: 'requests#index'
      post '/requests', to: 'requests#create'
      post '/request/:id/approve', to: 'requests#approve'
      post '/request/:id/decline', to: 'requests#decline'
