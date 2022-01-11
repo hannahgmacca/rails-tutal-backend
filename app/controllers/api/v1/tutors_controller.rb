@@ -1,7 +1,8 @@
 class Api::V1::TutorsController < ApplicationController
     # before_action :set_tutor_profile, only: %i[ show edit update destroy ]
     before_action :set_student, only: %i[ my_tutors ]
-    before_action :authenticate_user, only: %i[ my_tutors ]
+    before_action :set_tutor, only: %i[ update ]
+    # before_action :authenticate_user, only: %i[ my_tutors update ]
 
     def index
         @tutors = Tutor.where(nil)
@@ -37,17 +38,13 @@ class Api::V1::TutorsController < ApplicationController
     # end
     # end
 
-    # def update
-    # respond_to do |format|
-    #     if @tutor.update(tutor_params)
-    #     format.html { redirect_to @tutor_subject, notice: "tutor was successfully updated." }
-    #     format.json { render :show, status: :ok, location: @tutor }
-    #     else
-    #     format.html { render :edit, status: :unprocessable_entity }
-    #     format.json { render json: @tutor.errors, status: :unprocessable_entity }
-    #     end
-    # end
-    # end
+    def update
+        if @tutor.update(tutor_params)
+            render json: {tutor: @tutor}, status: 200
+        else
+            render json: {error: @tutor.errors}, status: :unprocessable_entity
+        end
+    end
 
     # def destroy
     # @tutor.destroy
@@ -59,12 +56,12 @@ class Api::V1::TutorsController < ApplicationController
 
     private
     # Use callbacks to share common setup or constraints between actions.
-    def set_tutor_profile
-        @tutor = Tutor.find(params[:id])
-    end
+    # def set_tutor
+    #     @tutor = Tutor.find(params[:id])
+    # end
 
     # Only allow a list of trusted parameters through.
     def tutor_params
-        params.require(:tutor).permit(:user, :years_experience, :rating, :user_info_id, :online, :rate)
+        params.require(:tutor).permit(:user, :years_experience, :rating, :user_info_id, :online, :rate, :onboarding)
     end
 end

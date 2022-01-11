@@ -32,6 +32,8 @@ Rails.application.routes.draw do
      delete '/student/tutor/:id', to: 'tutor_students#remove_tutor'
      post 'student/tutor', to: 'tutor_students#create'
 
+     post 'tutor/me', to: 'tutors#update'
+
      ## STUDENTS ## 
      get '/tutor/students', to: 'tutor_students#my_students'
      delete '/tutor/student/:id', to: 'tutor_students#student'
@@ -39,9 +41,10 @@ Rails.application.routes.draw do
 
      ## CURRENT USER ## 
      get '/me', to: 'users#get_current'
+     post '/me', to: 'users#update'
 
      ## RATING ##
-     post '/review', to: 'tutor_students#add_review'
+     post 'student/review', to: 'tutor_students#add_review'
 
      post 'user_token' => 'user_token#create'
 

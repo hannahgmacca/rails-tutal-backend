@@ -2,6 +2,7 @@ module Api
     module V1
         class UsersController < ApplicationController
             before_action :authenticate_user, only: %i[ get_current index ]
+            before_action :set_user_info, only: %i[ update ]
             skip_before_action :verify_authenticity_token, raise: false
 
             # TODO: Maybe move this to student controller
@@ -62,7 +63,7 @@ module Api
                 @user = User.find_by_email(params[:email])
                 if @user && @user.authenticate(params[:password])
                     auth_token = Knock::AuthToken.new payload: {sub: @user.id}
-                    render json: {jwt: auth_token.token}, status: 200
+                    render json: {jwt: auth_token.token, user: @user}, status: 200
                 else
                     render json: {error: "Incorrect Username or Password"}, status: 404 
 
@@ -77,9 +78,9 @@ module Api
                 student = Student.find_by_user_info_id(user_info.id)
                 if tutor 
                 # render json: { credentials: current_user, is_tutor: true, firstname: user_info.first_name}
-                render json: { user_id: current_user.id, tutor_id: tutor.id, is_tutor: true, firstname: user_info.first_name, lastname: user_info.last_name, about: user_info.about, postcode: user_info.postcode, tutor_info: tutor }
+                render json: { user_id: current_user.id, tutor_id: tutor.id, is_tutor: true, firstname: user_info.first_name, lastname: user_info.last_name, about: user_info.about, postcode: user_info.postcode, tutor_info: tutor, email: current_user.email }
                 elsif student
-                render json: { user_id: current_user.id, student_id: student.id, is_tutor: false, firstname: user_info.first_name, lastname: user_info.last_name, about: user_info.about, postcode: user_info.postcode, student_info: student }
+                render json: { user_id: current_user.id, student_id: student.id, is_tutor: false, firstname: user_info.first_name, lastname: user_info.last_name, about: user_info.about, postcode: user_info.postcode, student_info: student, email: current_user.email }
                 else 
                 render json: { error: user_info.errors }, status: 404
                 end
@@ -91,9 +92,19 @@ module Api
                 render json: @users
             end
 
+            def update
+            current_user.email = user_params[:email]
+            @user_info.first_name = user_params[:first_name]
+            @user_info.last_name = user_params[:last_name]
+            @user_info.about = user_params[:about]
+                if current_user.save && @user_info.save
+                    render json: {user: current_user, user_info: @user_info}, status: 200
+                end
+            end
+
             private 
             def user_params 
-                params.permit(:username, :email, :password, :password_confirmation)
+                params.permit(:email, :password, :password_confirmation, :about, :first_name, :last_name)
             end 
 
             def tutor_params

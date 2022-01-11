@@ -1,5 +1,5 @@
 class Api::V1::TutorStudentsController < ApplicationController
-    before_action :set_student, only: %i[ my_tutors remove_tutor]
+    before_action :set_student, only: %i[ my_tutors remove_tutor add_review]
     before_action :set_tutor, only: %i[ my_students remove_student]
     # before_action :authenticate_user
     
@@ -14,7 +14,9 @@ class Api::V1::TutorStudentsController < ApplicationController
     #  ROUTE GET: /tutor/students
     #  Returns array of students that current tutor is tutoring
     def my_students
-        @tutors = TutorStudent.where(tutor_id: @tutor.id)
+        @students = TutorStudent.where(tutor_id: @tutor.id)
+
+        render json: @students
     end
 
     # ROUTE DELETE: /student/tutor/:id
@@ -39,6 +41,21 @@ class Api::V1::TutorStudentsController < ApplicationController
         end
     end
 
+    def add_review
+        @tutor_student = TutorStudent.find_by_tutor_id_and_student_id(tutor_student_params[:tutor_id], @student.id)
+        @tutor = Tutor.find(tutor_student_params[:tutor_id])
+        @tutor_student.review = tutor_student_params[:review]
+        @tutor.ratings_left += 1
+        @tutor.ratings_sum += tutor_student_params[:rating]
+        @tutor.rating = @tutor.ratings_sum / @tutor.ratings_left
+
+        if @tutor_student.save && @tutor.save
+            render json: { tutor_student: @tutor_student, tutor_rating: @tutor.rating }, status: :created
+        else
+            render json: {errors: @tutor_student.errors}, status: :unprocessable_entity
+        end
+    end
+
     private
     # Use callbacks to share common setup or constraints between actions.
     def set_tutor_student
@@ -47,6 +64,6 @@ class Api::V1::TutorStudentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tutor_student_params
-        params.require(:tutor_student).permit(:student_id, :tutor_id, :review)
+        params.permit(:student_id, :tutor_id, :review, :rating)
     end
 end

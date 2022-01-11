@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
     include Knock::Authenticable
-    before_action :authenticate_user, only: %i[ set_student set_tutor]
+    before_action :authenticate_user, only: %i[ set_student set_tutor set_user_info]
     skip_before_action :verify_authenticity_token, raise: false
 
     private 
@@ -12,5 +12,9 @@ class ApplicationController < ActionController::Base
     def set_student
         @user_info = UserInfo.find_by_user_id(current_user.id)
         @student = Student.find_by_user_info_id(@user_info.id)
+    end
+
+    def set_user_info
+        @user_info = UserInfo.find_by_user_id(current_user.id)
     end
 end

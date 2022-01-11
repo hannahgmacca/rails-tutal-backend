@@ -23,15 +23,19 @@ class Api::V1::RequestsController < ApplicationController
     # ROUTE /tutor/requests
     # Returns array of requests that are awaiting action for current tutor
     def my_requests_tutor
-        @requests = Request.where(tutor_id: @tutor.id, is_approved: null)
+        @requests = Request.where(:tutor_id => @tutor.id, :is_approved => nil)
         
         render json: @requests
     end
 
     # ROUTE /request/:id/approve
     def approve
-        if @tutor.id == @request.id
-            @request.approved = true 
+        if @tutor.id == @request.tutor_id
+            @request.is_approved = true 
+            @tutor_student = TutorStudent.create(tutor_id: @tutor.id, student_id: @request.student_id)
+            if @request.save && @tutor_student.save
+                render json: {is_approved: true, tutor_student: @tutor_student}, status: 200
+            end
         else
             render json: {error: "You are not authorised to approved this"}, status: 400
         end
@@ -39,8 +43,11 @@ class Api::V1::RequestsController < ApplicationController
 
     # ROUTE /request/:id/decline
     def decline
-        if @tutor.id == @request.id
-            @request.approved = false
+        if @tutor.id == @request.tutor_id
+            @request.is_approved = false
+            if @request.save
+                render json: {approved: false, request: @request}, status: 200
+            end
         else
             render json: {error: "You are not authorised to approved this"}, status: 400
         end
