@@ -1,6 +1,7 @@
 class Api::V1::TutorStudentsController < ApplicationController
     before_action :set_student, only: %i[ my_tutors remove_tutor add_review]
     before_action :set_tutor, only: %i[ my_students remove_student]
+    before_action :set_tutor_student, only: %i[ remove_tutor remove_student]
     # before_action :authenticate_user
     
     #  ROUTE GET: /student/tutors
@@ -22,13 +23,23 @@ class Api::V1::TutorStudentsController < ApplicationController
     # ROUTE DELETE: /student/tutor/:id
     # Deletes the tutor relationship associated with current student
     def remove_tutor
-        #TODO
+        if @tutor_student.student_id == @student.id
+            @tutor_student.destroy
+            render json: { success: "Deleted" }, status: 204
+        else 
+            render json: { error: "You do not have permission to do this" }, status: 404
+        end
     end
 
     # ROUTE DELETE: /tutor/student/:id
     # Deletes the student relationship associated with current tutor
     def remove_student
-        #TODO
+        if @tutor_student.tutor_id == @tutor.id
+            @tutor_student.destroy
+            render json: { success: "Deleted" }, status: 204
+        else
+            render json: { error: "You do not have permission to do this" }, status: 404
+        end
     end
 
     def create
@@ -59,7 +70,7 @@ class Api::V1::TutorStudentsController < ApplicationController
     private
     # Use callbacks to share common setup or constraints between actions.
     def set_tutor_student
-        @tutor_student = Student.find(params[:id])
+        @tutor_student = TutorStudent.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

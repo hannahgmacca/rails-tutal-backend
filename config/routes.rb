@@ -18,8 +18,9 @@ Rails.application.routes.draw do
      get '/student/requests', to: 'requests#my_requests_student'
 
      ## SUBJECTS ##
-     get '/student/subjects', to: 'student_subjects#index'
+    #  get '/student/subjects', to: 'student_subjects#index'
      get '/tutor/subjects', to: 'tutor_subjects#index'
+     get '/tutor/subjects/:id', to: 'tutor_subjects#tutor_index'
      get '/subjects', to: 'subjects#index'
      post 'student/subjects', to: 'student_subjects#create'
      post 'tutor/subjects', to: 'tutor_subjects#create'
@@ -36,7 +37,7 @@ Rails.application.routes.draw do
 
      ## STUDENTS ## 
      get '/tutor/students', to: 'tutor_students#my_students'
-     delete '/tutor/student/:id', to: 'tutor_students#student'
+     delete '/tutor/student/:id', to: 'tutor_students#remove_student'
      get '/students', to: 'students#index'
 
      ## CURRENT USER ## 

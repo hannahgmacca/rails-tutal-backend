@@ -93,26 +93,29 @@ module Api
             end
 
             def update
-            current_user.email = user_params[:email]
-            @user_info.first_name = user_params[:first_name]
-            @user_info.last_name = user_params[:last_name]
-            @user_info.about = user_params[:about]
-                if current_user.save && @user_info.save
+            @user = User.find(current_user.id)
+                # if @user.update(user_params[:user]) && @user_info.update(user_params[:user_info]) 
+                    if @user_info.main_image.attach(image_params[:image][:main_image])
                     render json: {user: current_user, user_info: @user_info}, status: 200
-                end
+                    end
             end
 
             private 
             def user_params 
-                params.permit(:email, :password, :password_confirmation, :about, :first_name, :last_name)
+                params.permit(:user => [:email, :password, :password_confirmation], :user_info => [ :about, :first_name, :last_name, :main_image])
             end 
 
+            def image_params 
+                params.permit(:image => [:main_image])
+
+            end
+
             def tutor_params
-                params.permit(:credentials => [:username, :email, :password, :password_confirmation], :user_info => [:first_name, :last_name, :about, :postcode], :tutor => [:years_experience, :rating, :rate, :online, :rate])
+                params.permit(:credentials => [:username, :email, :password, :password_confirmation], :user_info => [:first_name, :last_name, :about, :postcode, :main_image], :tutor => [:years_experience, :rating, :rate, :online, :rate])
             end
 
             def student_params
-                params.permit(:credentials => [:email, :password, :password_confirmation], :user_info => [:first_name, :last_name, :about, :postcode], :student => [:DOB])
+                params.permit(:credentials => [:email, :password, :password_confirmation], :user_info => [:first_name, :last_name, :about, :postcode, :main_image, :user_id], :student => [:DOB])
             end
         end
     end

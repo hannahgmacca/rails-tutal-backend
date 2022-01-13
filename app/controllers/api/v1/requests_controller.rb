@@ -56,7 +56,7 @@ class Api::V1::RequestsController < ApplicationController
     def create
     already_exists = Request.find_by_tutor_id_and_student_id(request_params[:tutor_id], @student.id)
     if already_exists
-        render json: { error: "Request has already been made" }, status: 400
+        render json: { error: "Request has already been made" }, status: 401
     else
     @request = Request.new(request_params)
     @request.student_id = @student.id
