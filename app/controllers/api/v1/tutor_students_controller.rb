@@ -1,6 +1,6 @@
 class Api::V1::TutorStudentsController < ApplicationController
     before_action :set_student, only: %i[ my_tutors remove_tutor add_review]
-    before_action :set_tutor, only: %i[ my_students remove_student]
+    before_action :set_tutor, only: %i[ my_students remove_student get_reviews]
     before_action :set_tutor_student, only: %i[ remove_tutor remove_student]
     # before_action :authenticate_user
     
@@ -56,6 +56,7 @@ class Api::V1::TutorStudentsController < ApplicationController
         @tutor_student = TutorStudent.find_by_tutor_id_and_student_id(tutor_student_params[:tutor_id], @student.id)
         @tutor = Tutor.find(tutor_student_params[:tutor_id])
         @tutor_student.review = tutor_student_params[:review]
+        @tutor_student.rating = tutor_student_params[:rating]
         @tutor.ratings_left += 1
         @tutor.ratings_sum += tutor_student_params[:rating]
         @tutor.rating = @tutor.ratings_sum / @tutor.ratings_left
@@ -65,6 +66,12 @@ class Api::V1::TutorStudentsController < ApplicationController
         else
             render json: {errors: @tutor_student.errors}, status: :unprocessable_entity
         end
+    end
+
+    def get_reviews
+        @reviews = TutorStudent.where(tutor_id: @tutor.id)
+
+        render json: @reviews
     end
 
     private

@@ -3,7 +3,7 @@ class CreateTutorStudents < ActiveRecord::Migration[6.1]
     create_table :tutor_students do |t|
       t.references :student, null: false, foreign_key: true
       t.references :tutor, null: false, foreign_key: true
-      t.integer :review
+      t.string :review
 
       t.timestamps
     end

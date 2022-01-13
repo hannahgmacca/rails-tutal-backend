@@ -44,9 +44,9 @@ Rails.application.routes.draw do
      get '/me', to: 'users#get_current'
      post '/me', to: 'users#update'
 
-     ## RATING ##
+     ## RATING / REVIEWS ##
      post 'student/review', to: 'tutor_students#add_review'
-
+     get 'tutor/reviews', to: 'tutor_students#get_reviews'
      post 'user_token' => 'user_token#create'
 
      ### AUTHORIZATION ###

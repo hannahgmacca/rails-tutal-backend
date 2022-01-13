@@ -491,7 +491,7 @@ Request.create(student_id: 1, tutor_id: 2, is_approved: false)
 Request.create(student_id: 2, tutor_id: 1, is_approved: true)
 Request.create(student_id: 2, tutor_id: 2, is_approved: false)
 
-TutorStudent.create(student_id: 1, tutor_id: 1, review: 5)
-TutorStudent.create(student_id: 2, tutor_id: 1, review: 4)
+TutorStudent.create(student_id: 1, tutor_id: 1, review: "Great service", rating: 5)
+TutorStudent.create(student_id: 2, tutor_id: 1, review: "Terrible tutor, would never go back", rating: 1)
 
 
