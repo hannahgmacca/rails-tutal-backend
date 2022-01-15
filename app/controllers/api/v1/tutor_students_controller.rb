@@ -1,8 +1,7 @@
 class Api::V1::TutorStudentsController < ApplicationController
-    before_action :set_student, only: %i[ my_tutors remove_tutor add_review]
-    before_action :set_tutor, only: %i[ my_students remove_student get_reviews]
+    before_action :set_student, only: %i[ my_tutors remove_tutor ]
+    before_action :set_tutor, only: %i[ my_students remove_student  ]
     before_action :set_tutor_student, only: %i[ remove_tutor remove_student]
-    # before_action :authenticate_user
     
     #  ROUTE GET: /student/tutors
     #  Returns array of tutors that are tutoring this student

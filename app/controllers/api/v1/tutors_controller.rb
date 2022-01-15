@@ -1,8 +1,7 @@
 class Api::V1::TutorsController < ApplicationController
-    # before_action :set_tutor_profile, only: %i[ show edit update destroy ]
     before_action :set_student, only: %i[ my_tutors ]
     before_action :set_tutor, only: %i[ update ]
-    # before_action :authenticate_user, only: %i[ my_tutors update ]
+    before_action :set_url_tutor, only: %i[ show ]
 
     def index
         @tutors = Tutor.where(nil)
@@ -15,50 +14,23 @@ class Api::V1::TutorsController < ApplicationController
         render json: @tutors
     end 
     
-    # def show
-    # end
-
-    # def new
-    # end
-
-    # def edit
-    # end
-
-    # def create
-    # @tutor = Tutor.new(tutor_params)
-
-    # respond_to do |format|
-    #     if @tutor.save
-    #     format.html { redirect_to @tutor, notice: "tutor was successfully created." }
-    #     format.json { render :show, status: :created, location: @tutor}
-    #     else
-    #     format.html { render :new, status: :unprocessable_entity }
-    #     format.json { render json: @tutor.errors, status: :unprocessable_entity }
-    #     end
-    # end
-    # end
+    def show
+        render json: @tutor
+    end
 
     def update
         if @tutor.update(tutor_params)
-            render json: {tutor: @tutor}, status: 200
+            render json: { user_id: current_user.id, tutor_id: @tutor.id, is_tutor: true, firstname: @tutor.user_info.first_name, lastname: @tutor.user_info.last_name, about: @tutor.user_info.about, postcode: @tutor.user_info.postcode, tutor_info: @tutor, email: current_user.email }
         else
             render json: {error: @tutor.errors}, status: :unprocessable_entity
         end
     end
 
-    # def destroy
-    # @tutor.destroy
-    # respond_to do |format|
-    #     format.html { redirect_to tutor_url, notice: "tutor was successfully destroyed." }
-    #     format.json { head :no_content }
-    # end
-    # end
-
     private
     # Use callbacks to share common setup or constraints between actions.
-    # def set_tutor
-    #     @tutor = Tutor.find(params[:id])
-    # end
+    def set_url_tutor
+        @tutor = Tutor.find(params[:id])
+    end
 
     # Only allow a list of trusted parameters through.
     def tutor_params

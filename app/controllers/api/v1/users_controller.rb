@@ -94,10 +94,9 @@ module Api
 
             def update
             @user = User.find(current_user.id)
-                # if @user.update(user_params[:user]) && @user_info.update(user_params[:user_info]) 
-                    if @user_info.main_image.attach(image_params[:image][:main_image])
+             if @user.update(user_params[:user]) && @user_info.update(user_params[:user_info]) 
                     render json: {user: current_user, user_info: @user_info}, status: 200
-                    end
+             end
             end
 
             private 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_13_230941) do
+ActiveRecord::Schema.define(version: 2022_01_14_203218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,17 @@ ActiveRecord::Schema.define(version: 2022_01_13_230941) do
     t.index ["tutor_id"], name: "index_requests_on_tutor_id"
   end
 
+  create_table "reviews", force: :cascade do |t|
+    t.integer "rating"
+    t.string "review"
+    t.bigint "student_id", null: false
+    t.bigint "tutor_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["student_id"], name: "index_reviews_on_student_id"
+    t.index ["tutor_id"], name: "index_reviews_on_tutor_id"
+  end
+
   create_table "student_subjects", force: :cascade do |t|
     t.bigint "student_id", null: false
     t.bigint "subject_id", null: false
@@ -86,8 +97,6 @@ ActiveRecord::Schema.define(version: 2022_01_13_230941) do
     t.bigint "tutor_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "rating"
-    t.string "review"
     t.index ["student_id"], name: "index_tutor_students_on_student_id"
     t.index ["tutor_id"], name: "index_tutor_students_on_tutor_id"
   end
@@ -137,6 +146,8 @@ ActiveRecord::Schema.define(version: 2022_01_13_230941) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "requests", "students"
   add_foreign_key "requests", "tutors"
+  add_foreign_key "reviews", "students"
+  add_foreign_key "reviews", "tutors"
   add_foreign_key "student_subjects", "students"
   add_foreign_key "student_subjects", "subjects"
   add_foreign_key "students", "user_infos"

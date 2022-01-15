@@ -32,6 +32,7 @@ Rails.application.routes.draw do
      get '/student/tutors', to: 'tutor_students#my_tutors'
      delete '/student/tutor/:id', to: 'tutor_students#remove_tutor'
      post 'student/tutor', to: 'tutor_students#create'
+     get '/tutors/:id', to: 'tutors#show'
 
      post 'tutor/me', to: 'tutors#update'
 
@@ -45,11 +46,13 @@ Rails.application.routes.draw do
      post '/me', to: 'users#update'
 
      ## RATING / REVIEWS ##
-     post 'student/review', to: 'tutor_students#add_review'
-     get 'tutor/reviews', to: 'tutor_students#get_reviews'
-     post 'user_token' => 'user_token#create'
+     post 'student/review', to: 'reviews#add_review'
+     get 'tutor/reviews', to: 'reviews#get_my_reviews'
+     get 'student/reviews/:id', to: 'reviews#get_tutor_reviews'
+     delete 'student/review/:id', to: 'reviews#destroy'
 
      ### AUTHORIZATION ###
+     post 'user_token' => 'user_token#create'
      scope '/auth' do
       post '/signin', to: 'user_token#create'
       post '/signup', to: 'users#create'
