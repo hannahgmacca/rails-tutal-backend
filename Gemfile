@@ -19,7 +19,6 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 gem 'bcrypt'
 gem 'knock'
-gem "aws-sdk-s3", require: false
 gem 'rack-cors'
 gem 'active_model_serializers', '~> 0.10.0'
 
